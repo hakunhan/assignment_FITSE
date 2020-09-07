@@ -92,10 +92,154 @@ public class Customer implements Comparable {
         return address != null && address.length() > 0 && address.length() <= 100;
     }
 
+    public Customer(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address){
+        if(!validateId(id)){
+            System.err.println("Invalid id: " + id);
+            return;
+        }
+        if(!validateName(name)){
+            System.err.println("Invalid name: " + name);
+            return;
+        }
+        if(!validatePhoneNumber(phoneNumber)){
+            System.err.println("Invalid phone number: " + phoneNumber);
+            return;
+        }
+        if(!validateAddress(address)){
+            System.err.println("Invalid address: " + address);
+        }
+
+        this.id = id;
+        setName(name);
+        setPhoneNumber(phoneNumber);
+        setAddress(address);
+    }
+
+    /**
+     * return customer's id
+     *
+     * @effects <tt>return id</tt>
+     */
+    @DOpt(type = OptType.Observer) @AttrRef("id")
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * return customer's name
+     *
+     * @effects <tt>return name</tt>
+     */
+    @DOpt(type = OptType.Observer) @AttrRef("name")
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * return customer's phone number
+     *
+     * @effects <tt>return phone number</tt>
+     */
+    @DOpt(type = OptType.Observer) @AttrRef("phoneNumber")
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * return customer's address
+     *
+     * @effects <tt>return address</tt>
+     */
+    @DOpt(type = OptType.Observer) @AttrRef("address")
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * change customer's name
+     *
+     * @modifies <tt>this.name</tt>
+     * @effects <pre>
+     *     if name satisfies abstract properties
+     *          return true
+     *     else
+     *          return false
+     * </pre>
+     */
+    @DOpt(type = OptType.Mutator) @AttrRef("name")
+    public boolean setName(String name) {
+        if (validateName(name)) {
+            this.name = name;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * change customer's phone number
+     *
+     * @modifies <tt>this.phoneNumber</tt>
+     * @effects <pre>
+     *     if phoneNumber satisfies abstract properties
+     *          return true
+     *     else
+     *          return false
+     * </pre>
+     */
+    @DOpt(type = OptType.Mutator) @AttrRef("phoneNumber")
+    public boolean setPhoneNumber(String phoneNumber) {
+        if (validatePhoneNumber(phoneNumber)) {
+            this.phoneNumber = phoneNumber;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * change customer's address
+     *
+     * @modifies <tt>this.address</tt>
+     * @effects <pre>
+     *     if address satisfies abstract properties
+     *          return true
+     *     else
+     *          return false
+     * </pre>
+     */
+    @DOpt(type = OptType.Mutator) @AttrRef("address")
+    public boolean setAddress(String address) {
+        if (validateAddress(address)) {
+            this.address = address;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if the current object satisfies the abstract properties
+     * @effects <pre>
+     *     if this satisfies the abstract properties
+     *          return true
+     *     else
+     *          return false
+     * </pre>
+     */
+    public boolean repOK(){
+        return validateId(id) && validateName(name) && validatePhoneNumber(phoneNumber) &&validateAddress(address);
+    }
+
     @Override
     public int compareTo(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }
