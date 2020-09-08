@@ -25,6 +25,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -37,6 +44,26 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="a1_1801040081.Test" />
+      <module name="a1_1801040081" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="a1_1801040081.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -66,6 +93,10 @@
       <screen x="0" y="40" width="1536" height="824" />
     </state>
     <state x="531" y="153" key="#com.intellij.ide.util.MemberChooser/0.40.1536.824@0.40.1536.824" timestamp="1599492526427" />
+    <state x="586" y="366" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599572715816">
+      <screen x="0" y="40" width="1536" height="824" />
+    </state>
+    <state x="586" y="366" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.40.1536.824@0.40.1536.824" timestamp="1599572715816" />
     <state x="431" y="185" width="672" height="678" key="search.everywhere.popup" timestamp="1599492077787">
       <screen x="0" y="40" width="1536" height="824" />
     </state>

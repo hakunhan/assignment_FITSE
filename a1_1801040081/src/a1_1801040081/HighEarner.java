@@ -25,7 +25,7 @@ import java.lang.Math;
  * mutable(income) = true /\ optional(income) = false /\ min(income) = 10^7
  */
 public class HighEarner extends Customer{
-	@DomainConstraint(type = "String", mutable = true, optional = false, min = Math.pow(10,7))
+	@DomainConstraint(type = "String", mutable = true, optional = false, min = 10^7)
 	private float income;
 
 	/**
