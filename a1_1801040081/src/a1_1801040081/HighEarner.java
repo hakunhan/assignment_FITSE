@@ -42,12 +42,48 @@ public class HighEarner extends Customer{
 		return income >= Math.pow(10,7);
 	}
 
-	public HighEarner(@AttrRef("income") float income){
-		if(!validateIncome){
+	@Override
+	protected boolean validateId(int id){
+		return id >= Math.pow(10,7) && id <= Math.pow(10,9);
+	}
+
+	public HighEarner(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address, @AttrRef("income") float income){
+		super(id,name,phoneNumber,address);
+		if(!validateIncome(income)){
 			System.err.println("Invalid income: " + income);
 			return;
 		}
 
-		setIncome(income);	
+		setIncome(income);
+	}
+
+	/**
+	 * return high earner's income
+	 *
+	 * @effects <tt>return income</tt>
+	 */
+	@DOpt(type = OptType.Observer) @AttrRef("income")
+	public float getIncome(){
+		return income;
+	}
+
+	/**
+	 * change high earner's income
+	 *
+	 * @modifies <tt>this.name</tt>
+	 * @effects <pre>
+	 *     if income satisfies abstract properties
+	 *          return true
+	 *     else
+	 *          return false
+	 * </pre>
+	 */
+	@DOpt(type = OptType.Mutator) @AttrRef("income")
+	public boolean setIncome(float income) {
+		if (validateIncome(income)) {
+			this.income = income;
+			return true;
+		}
+		return false;
 	}
 }
