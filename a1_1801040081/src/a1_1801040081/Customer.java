@@ -23,7 +23,7 @@ import java.lang.Math;
  * mutable(phoneNumber) = true /\ optional(phoneNumber) = false /\ length(phoneNumber) = 10 /\
  * mutable(address) = true /\ optional(address) = false /\ length(address) = 100
  */
-public class Customer implements Comparable {
+public class Customer implements Comparable<Customer> {
     @DomainConstraint(type = "Integer", mutable = false, optional = false, min = 1, max = 10^9)
     private int id;
     
@@ -228,9 +228,21 @@ public class Customer implements Comparable {
         return validateId(id) && validateName(name) && validatePhoneNumber(phoneNumber) &&validateAddress(address);
     }
 
+    /**
+     * compare one customer's name to another
+     * @effects<pre>
+     *     if this customer's name equals to another
+     *          return 1
+     *     else
+     *          return 0
+     * </pre>
+     */
     @Override
-    public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(Customer a) {
+        if(a.name.equals(this.name))
+            return 1;
+        else
+            return 0;
     }
 
     @Override
