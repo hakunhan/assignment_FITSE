@@ -9,20 +9,12 @@ import java.lang.Math;
 /**
  * @overview provide information about flower shop's high earner customers
  * @attribute
- * id           Integer int
- * name         String
- * phoneNumber  String
- * address      String
  * income       Float
  * @object 
  * A typical HighEarner is HighEarner = {id, name, phoneNumber, address}
  * where id(id), name(name), phoneNumber(phoneNumber), address(address)
  * @abstract_properties
- * mutable(id) = false /\ optional(id) = false /\ min(id) = 10^7 /\ max(id) = 10^9 /\
- * mutable(name) = true /\ optional(name) = false /\ length(name) = 50 /\
- * mutable(phoneNumber) = true /\ optional(phoneNumber) = false /\ length(phoneNumber) = 10 /\
- * mutable(address) = true /\ optional(address) = false /\ length(address) = 100 /\
- * mutable(income) = true /\ optional(income) = false /\ min(income) = 10^7
+ * P_Customer /\ min(id) = 10^7 /\ mutable(income) = true /\ optional(income) = false /\ min(income) = 10^7
  */
 public class HighEarner extends Customer{
 	@DomainConstraint(type = "String", mutable = true, optional = false, min = 10^7)
@@ -43,12 +35,22 @@ public class HighEarner extends Customer{
 	}
 
 	@Override
+        @DomainConstraint(type = "Integer", mutable = false, optional = false, min = 10^7, max = 10^9)
 	protected boolean validateId(int id){
 		return id >= Math.pow(10,7) && id <= Math.pow(10,9);
 	}
 
+        /**
+        * @effects <pre>
+        *       if id, name, phoneNumber, address, income are valid
+        *           initialise this as HighEarner:<id,name,phoneNumber,address,income>
+        *       else
+        *           print error message
+        *          </pre>
+        */
 	public HighEarner(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address, @AttrRef("income") float income){
 		super(id,name,phoneNumber,address);
+                
 		if(!validateIncome(income)){
 			System.err.println("Invalid income: " + income);
 			return;
@@ -86,4 +88,18 @@ public class HighEarner extends Customer{
 		}
 		return false;
 	}
+        
+        @Override
+        /**
+        * check if the current object satisfies the abstract properties
+        * @effects <pre>
+        *     if this satisfies the abstract properties
+        *          return true
+        *     else
+        *          return false
+        * </pre>
+        */
+        protected boolean repOK(){
+            return super.repOK() && validateIncome(income);
+        }
 }

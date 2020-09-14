@@ -224,7 +224,7 @@ public class Customer implements Comparable<Customer> {
      *          return false
      * </pre>
      */
-    public boolean repOK(){
+    protected boolean repOK(){
         return validateId(id) && validateName(name) && validatePhoneNumber(phoneNumber) &&validateAddress(address);
     }
 
@@ -233,16 +233,24 @@ public class Customer implements Comparable<Customer> {
      * @effects<pre>
      *     if this customer's name equals to another
      *          return 1
-     *     else
+     *     else if this customer's name is not equals to another
      *          return 0
+     *     else 
+     *          return -1
      * </pre>
      */
     @Override
     public int compareTo(Customer a) {
-        if(a.name.equals(this.name))
-            return 1;
-        else
-            return 0;
+        try{
+            if(a.name.equals(this.name))
+                return 1;
+            else
+                return 0;
+        }catch (Exception e){
+            System.err.println("Can't compare the two customers");
+        }
+        
+        return -1;
     }
 
     @Override
