@@ -91,11 +91,11 @@ public class Customer implements Comparable<Customer> {
     private boolean validateAddress(String address){
         return address != null && address.length() > 0 && address.length() <= 100;
     }
-    
+
     /**
      * @effects <pre>
-     *       if id, name, phoneNumber, address, income are valid
-     *           initialise this as HighEarner:<id,name,phoneNumber,address,income>
+     *       if id, name, phoneNumber, address are valid
+     *           initialise this as Customer:<id,name,phoneNumber,address>
      *       else
      *           print error message
      *          </pre>
