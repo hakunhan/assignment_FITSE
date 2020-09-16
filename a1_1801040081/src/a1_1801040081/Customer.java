@@ -91,7 +91,15 @@ public class Customer implements Comparable<Customer> {
     private boolean validateAddress(String address){
         return address != null && address.length() > 0 && address.length() <= 100;
     }
-
+    
+    /**
+     * @effects <pre>
+     *       if id, name, phoneNumber, address, income are valid
+     *           initialise this as HighEarner:<id,name,phoneNumber,address,income>
+     *       else
+     *           print error message
+     *          </pre>
+     */
     public Customer(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address){
         if(!validateId(id)){
             System.err.println("Invalid id: " + id);

@@ -40,14 +40,14 @@ public class HighEarner extends Customer{
 		return id >= Math.pow(10,7) && id <= Math.pow(10,9);
 	}
 
-        /**
-        * @effects <pre>
-        *       if id, name, phoneNumber, address, income are valid
-        *           initialise this as HighEarner:<id,name,phoneNumber,address,income>
-        *       else
-        *           print error message
-        *          </pre>
-        */
+	/**
+	 * @effects <pre>
+	 *       if id, name, phoneNumber, address, income are valid
+	 *           initialise this as HighEarner:<id,name,phoneNumber,address,income>
+	 *       else
+	 *           print error message
+	 *          </pre>
+	 */
 	public HighEarner(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address, @AttrRef("income") float income){
 		super(id,name,phoneNumber,address);
                 
