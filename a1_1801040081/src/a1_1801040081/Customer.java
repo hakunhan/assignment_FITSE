@@ -250,9 +250,9 @@ public class Customer implements Comparable<Customer> {
     @Override
     public int compareTo(Customer a) {
         try{
-            if(this.name.charAt(0) > a.name.charAt(0))
+            if(this.name.substring(0,1).toLowerCase().charAt(0) > a.name.substring(0,1).toLowerCase().charAt(0))
                 return 1;
-            else if(this.name.charAt(0) < a.name.charAt(0))
+            else if(this.name.substring(0,1).toLowerCase().charAt(0) < a.name.substring(0,1).toLowerCase().charAt(0))
                 return -1;
             else
                 return 0;
