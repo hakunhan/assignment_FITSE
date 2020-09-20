@@ -237,21 +237,23 @@ public class Customer implements Comparable<Customer> {
     }
 
     /**
-     * compare one customer's name to another
+     * compare a customer name with another on alphabetical order
      * @effects<pre>
-     *     if this customer's name equals to another
+     *     if this.name > customer a.name
      *          return 1
-     *     else if this customer's name is not equals to another
-     *          return 0
-     *     else 
+     *     else if this.name < customer a.name
      *          return -1
+     *     else 
+     *          return 0
      * </pre>
      */
     @Override
     public int compareTo(Customer a) {
         try{
-            if(a.name.equals(this.name))
+            if(this.name.charAt(0) > a.name.charAt(0))
                 return 1;
+            else if(this.name.charAt(0) < a.name.charAt(0))
+                return -1;
             else
                 return 0;
         }catch (Exception e){

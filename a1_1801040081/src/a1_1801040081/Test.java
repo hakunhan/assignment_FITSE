@@ -9,5 +9,6 @@ public class Test {
         System.out.println(b);
 
         System.out.println(a.compareTo(b));
+        System.out.println('\u10B7');
     }
 }
