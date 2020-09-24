@@ -1,9 +1,7 @@
 package a1_1801040081;
 
-import utils.DomainConstraint;
-import utils.AttrRef;
-import utils.DOpt;
-import utils.OptType;
+import utils.*;
+
 import java.lang.Math;
 
 /**
@@ -48,15 +46,15 @@ public class HighEarner extends Customer{
 	 *           print error message
 	 *          </pre>
 	 */
-	public HighEarner(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address, @AttrRef("income") float income){
+	public HighEarner(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber,
+					  @AttrRef("address") String address, @AttrRef("income") float income) throws NotPossibleException {
 		super(id,name,phoneNumber,address);
                 
 		if(!validateIncome(income)){
-			System.err.println("Invalid income: " + income);
-			return;
+			throw new NotPossibleException("Customer <init>: invalid argument");
 		}
 
-		setIncome(income);
+		this.income = income;
 	}
 
 	/**
@@ -75,18 +73,19 @@ public class HighEarner extends Customer{
 	 * @modifies <tt>this.name</tt>
 	 * @effects <pre>
 	 *     if income satisfies abstract properties
-	 *          return true
+	 *          set this.income = income
 	 *     else
-	 *          return false
+	 *          throw NotPossibleException
 	 * </pre>
 	 */
 	@DOpt(type = OptType.Mutator) @AttrRef("income")
-	public boolean setIncome(float income) {
+	public boolean setIncome(float income) throws NotPossibleException{
 		if (validateIncome(income)) {
 			this.income = income;
-			return true;
 		}
-		return false;
+		else{
+			throw new NotPossibleException("HighEarner.setIncome: invalid income " + income);
+		}
 	}
         
         @Override

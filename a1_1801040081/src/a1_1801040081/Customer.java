@@ -5,6 +5,7 @@ import utils.AttrRef;
 import utils.DOpt;
 import utils.OptType;
 import java.lang.Math;
+import utils.NotPossibleException;
 
 
 /**
@@ -93,34 +94,35 @@ public class Customer implements Comparable<Customer> {
     }
 
     /**
+     * check if all attributes satisfied abstract properties
+     * @effects <pre>
+     *     if id,name,phoneNumber,address are valid
+     *          return true
+     *     else
+     *          return false
+     * </pre>
+     */
+    private boolean validate(){
+        return validateId(id) && validateName(name) && validateAddress(address) && validatePhoneNumber(phoneNumber);
+    }
+
+    /**
      * @effects <pre>
      *       if id, name, phoneNumber, address are valid
      *           initialise this as Customer:<id,name,phoneNumber,address>
      *       else
-     *           print error message
+     *           throw NotPossibleException
      *          </pre>
      */
-    public Customer(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address){
-        if(!validateId(id)){
-            System.err.println("Invalid id: " + id);
-            return;
-        }
-        if(!validateName(name)){
-            System.err.println("Invalid name: " + name);
-            return;
-        }
-        if(!validatePhoneNumber(phoneNumber)){
-            System.err.println("Invalid phone number: " + phoneNumber);
-            return;
-        }
-        if(!validateAddress(address)){
-            System.err.println("Invalid address: " + address);
+    public Customer(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address) throws NotPossibleException{
+        if(!validate()){
+            throw new NotPossibleException("Customer <init>: invalid argument");
         }
 
         this.id = id;
-        setName(name);
-        setPhoneNumber(phoneNumber);
-        setAddress(address);
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 
     /**
@@ -169,18 +171,19 @@ public class Customer implements Comparable<Customer> {
      * @modifies <tt>this.name</tt>
      * @effects <pre>
      *     if name satisfies abstract properties
-     *          return true
+     *          set this.name = name
      *     else
-     *          return false
+     *          throw NotPossibleException
      * </pre>
      */
     @DOpt(type = OptType.Mutator) @AttrRef("name")
-    public boolean setName(String name) {
+    public void setName(String name) throws NotPossibleException{
         if (validateName(name)) {
             this.name = name;
-            return true;
         }
-        return false;
+        else{
+            throw new NotPossibleException("Customer.setName: invalid name " + name);
+        }
     }
 
     /**
@@ -189,18 +192,19 @@ public class Customer implements Comparable<Customer> {
      * @modifies <tt>this.phoneNumber</tt>
      * @effects <pre>
      *     if phoneNumber satisfies abstract properties
-     *          return true
+     *          set this.phoneNumber = phoneNumber
      *     else
-     *          return false
+     *          throw NotPossibleException
      * </pre>
      */
     @DOpt(type = OptType.Mutator) @AttrRef("phoneNumber")
-    public boolean setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) throws NotPossibleException{
         if (validatePhoneNumber(phoneNumber)) {
             this.phoneNumber = phoneNumber;
-            return true;
         }
-        return false;
+        else{
+            throw new NotPossibleException("Customer.setPhoneNumber: invalid phoneNumber " + phoneNumber);
+        }
     }
 
     /**
@@ -209,18 +213,18 @@ public class Customer implements Comparable<Customer> {
      * @modifies <tt>this.address</tt>
      * @effects <pre>
      *     if address satisfies abstract properties
-     *          return true
+     *          set this.address = address
      *     else
-     *          return false
+     *          throw NotPossibleException
      * </pre>
      */
     @DOpt(type = OptType.Mutator) @AttrRef("address")
-    public boolean setAddress(String address) {
+    public void setAddress(String address) throws NotPossibleException {
         if (validateAddress(address)) {
             this.address = address;
-            return true;
+        } else {
+            throw new NotPossibleException("Customer.setAddress: invalid address: "+ address);
         }
-        return false;
     }
 
     /**
@@ -233,34 +237,34 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     protected boolean repOK(){
-        return validateId(id) && validateName(name) && validatePhoneNumber(phoneNumber) &&validateAddress(address);
+        return validate();
+    }
+
+    // interface Comparable
+    @Override
+    public int compareTo(Customer o) {
+        return compareByName(o);
     }
 
     /**
-     * compare a customer name with another on alphabetical order
-     * @effects<pre>
-     *     if this.name > customer a.name
-     *          return 1
-     *     else if this.name < customer a.name
-     *          return -1
-     *     else 
-     *          return 0
-     * </pre>
+     * compare one customer name with another
+     * @effects <pre>
+     *            if o is null
+     *              throw NullPointerException
+     *            else if o is not a Vehicle object
+     *              throw ClassCastException
+     *            else
+     *              return this.name.compareTo(o.name)
+     *          </pre>
      */
-    @Override
-    public int compareTo(Customer a) {
-        try{
-            if(this.name.substring(0,1).toLowerCase().charAt(0) > a.name.substring(0,1).toLowerCase().charAt(0))
-                return 1;
-            else if(this.name.substring(0,1).toLowerCase().charAt(0) < a.name.substring(0,1).toLowerCase().charAt(0))
-                return -1;
-            else
-                return 0;
-        }catch (Exception e){
-            System.err.println("Can't compare the two customers");
-        }
-        
-        return -1;
+    protected int compareByName(Customer o) throws NullPointerException, ClassCastException {
+        if (o == null)
+            throw new NullPointerException("Vehicle.compareByName");
+        else if (!(o instanceof Customer))
+            throw new ClassCastException("Vehicle.compareByName: not a Vehicle " + o);
+
+        Customer v = (Customer) o;
+        return this.name.compareTo(v.name);
     }
 
     @Override
