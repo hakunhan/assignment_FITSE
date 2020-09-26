@@ -50,7 +50,8 @@ public class Customer implements Comparable<Customer> {
     protected boolean validateId(int id){
         return id >= 1 && id <= Math.pow(10,9);
     }
-    
+
+
     /**
      * check if name satisfied abstract properties
      * 
@@ -92,6 +93,7 @@ public class Customer implements Comparable<Customer> {
     private boolean validateAddress(String address){
         return address != null && address.length() > 0 && address.length() <= 100;
     }
+
 
     /**
      * check if all attributes satisfied abstract properties

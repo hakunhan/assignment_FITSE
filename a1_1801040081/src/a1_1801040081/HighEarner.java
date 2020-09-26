@@ -19,21 +19,32 @@ public class HighEarner extends Customer{
 	private float income;
 
 	/**
-     * check if income satisfied abstract properties
-     *
-     * @effects <pre>
-     *      if id >= 1 /\ id <= 10^9
-     *          return true
-     *      else
-     *          return false
-     * </pre>
-     */
+	 * check if income satisfied abstract properties
+	 *
+	 * @effects <pre>
+	 *      if income >= 10^7
+	 *          return true
+	 *      else
+	 *          return false
+	 * </pre>
+	 */
 	private boolean validateIncome(float income){
 		return income >= Math.pow(10,7);
 	}
 
+
+	/**
+	 * check if id satisfied abstract properties
+	 *
+	 * @effects <pre>
+	 *      if id >= 10^7 /\ id <= 10^9
+	 *          return true
+	 *      else
+	 *          return false
+	 * </pre>
+	 */
 	@Override
-        @DomainConstraint(type = "Integer", mutable = false, optional = false, min = 10^7, max = 10^9)
+	@DomainConstraint(type = "Integer", mutable = false, optional = false, min = 10^7, max = 10^9)
 	protected boolean validateId(int id){
 		return id >= Math.pow(10,7) && id <= Math.pow(10,9);
 	}
@@ -79,7 +90,7 @@ public class HighEarner extends Customer{
 	 * </pre>
 	 */
 	@DOpt(type = OptType.Mutator) @AttrRef("income")
-	public boolean setIncome(float income) throws NotPossibleException{
+	public void setIncome(float income) throws NotPossibleException{
 		if (validateIncome(income)) {
 			this.income = income;
 		}
@@ -87,18 +98,17 @@ public class HighEarner extends Customer{
 			throw new NotPossibleException("HighEarner.setIncome: invalid income " + income);
 		}
 	}
-        
-        @Override
-        /**
-        * check if the current object satisfies the abstract properties
+
+	@Override
+	/**
+	* check if the current object satisfies the abstract properties
         * @effects <pre>
         *     if this satisfies the abstract properties
         *          return true
         *     else
         *          return false
         * </pre>
-        */
-        protected boolean repOK(){
+        */ protected boolean repOK(){
             return super.repOK() && validateIncome(income);
         }
 }
