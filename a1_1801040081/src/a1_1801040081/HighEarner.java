@@ -32,10 +32,8 @@ public class HighEarner extends Customer{
 		return income >= Math.pow(10,7);
 	}
 
-
 	/**
 	 * check if id satisfied abstract properties
-	 *
 	 * @effects <pre>
 	 *      if id >= 10^7 /\ id <= 10^9
 	 *          return true
