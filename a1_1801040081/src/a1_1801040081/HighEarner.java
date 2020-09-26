@@ -101,14 +101,15 @@ public class HighEarner extends Customer{
 
 	@Override
 	/**
-	* check if the current object satisfies the abstract properties
-        * @effects <pre>
-        *     if this satisfies the abstract properties
-        *          return true
-        *     else
-        *          return false
-        * </pre>
-        */ protected boolean repOK(){
+	 * check if the current object satisfies the abstract properties
+	 * @effects <pre>
+	 *     if this satisfies the abstract properties
+	 *          return true
+	 *     else
+	 *          return false
+	 * </pre>
+	 */
+	protected boolean repOK(){
             return super.repOK() && validateIncome(income);
         }
 }
