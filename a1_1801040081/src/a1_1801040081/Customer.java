@@ -5,6 +5,8 @@ import utils.AttrRef;
 import utils.DOpt;
 import utils.OptType;
 import java.lang.Math;
+import java.util.Objects;
+
 import utils.NotPossibleException;
 
 /**
@@ -93,19 +95,6 @@ public class Customer implements Comparable<Customer> {
     }
 
     /**
-     * check if all attributes satisfied abstract properties
-     * @effects <pre>
-     *     if id,name,phoneNumber,address are valid
-     *          return true
-     *     else
-     *          return false
-     * </pre>
-     */
-    private boolean validate(){
-        return validateId(id) && validateName(name) && validateAddress(address) && validatePhoneNumber(phoneNumber);
-    }
-
-    /**
      * @effects <pre>
      *       if id, name, phoneNumber, address are valid
      *           initialise this as Customer:<id,name,phoneNumber,address>
@@ -113,15 +102,37 @@ public class Customer implements Comparable<Customer> {
      *           throw NotPossibleException
      *          </pre>
      */
-    public Customer(@AttrRef("id") int id, @AttrRef("name") String name, @AttrRef("phoneNumber") String phoneNumber, @AttrRef("address") String address) throws NotPossibleException{
-        if(!validate()){
-            throw new NotPossibleException("Customer <init>: invalid argument");
+    public Customer(@AttrRef("id") int id,
+                    @AttrRef("name") String name,
+                    @AttrRef("phoneNumber") String phoneNumber,
+                    @AttrRef("address") String address)
+            throws NotPossibleException{
+
+        if (validateId(id)) {
+            this.id = id;
+        } else {
+            throw new NotPossibleException("Customer<init>: invalid id: " + id);
+
         }
 
-        this.id = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
+        if (validateName(name)) {
+            this.name = name;
+        } else {
+            throw new NotPossibleException("Customer<init>: invalid name: " + name);
+
+        }
+
+        if (validatePhoneNumber(phoneNumber)) {
+            this.phoneNumber = phoneNumber;
+        } else {
+            throw new NotPossibleException("Customer<init>: invalid phoneNumber: " + phoneNumber);
+        }
+
+        if (validateAddress(address)) {
+            this.address = address;
+        } else {
+            throw new NotPossibleException("Customer<init>: invalid address: " + address);
+        }
     }
 
     /**
@@ -236,7 +247,7 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     protected boolean repOK(){
-        return validate();
+        return validateId(id) && validatePhoneNumber(phoneNumber) && validateName(name) && validateAddress(address);
     }
 
     // interface Comparable
