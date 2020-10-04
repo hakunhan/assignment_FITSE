@@ -17,7 +17,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../timetable" />
   </component>
   <component name="RunManager">
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -51,6 +51,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1601803061531">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1601803061531" />
     <state width="1322" height="216" key="GridCell.Tab.0.bottom" timestamp="1601648182338">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
