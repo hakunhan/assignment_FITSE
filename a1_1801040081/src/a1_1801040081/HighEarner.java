@@ -98,6 +98,17 @@ public class HighEarner extends Customer{
 	}
 
 	@Override
+	public String toString() {
+		return "HighEarner{" +
+				"id=" + super.getId() +
+				", name='" + super.getName() + '\'' +
+				", phoneNumber='" + super.getPhoneNumber() + '\'' +
+				", address='" + super.getAddress() + '\'' +
+				"income=" + income + '\'' +
+				'}';
+	}
+
+	@Override
 	/**
 	 * check if the current object satisfies the abstract properties
 	 * @effects <pre>
