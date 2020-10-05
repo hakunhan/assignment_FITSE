@@ -7,7 +7,6 @@ public class Test {
 
         System.out.println(a);
         System.out.println(b);
-        System.out.println(a.validate());
 
         System.out.println(a.compareTo(b));
     }
