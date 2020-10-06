@@ -20,23 +20,29 @@ import utils.NotPossibleException;
  * A typical Customer is Customer = {id, name, phoneNumber, address}
  * where id(id), name(name), phoneNumber(phoneNumber), address(address)
  * @abstract_properties
- * mutable(id) = false /\ optional(id) = false /\ min(id) = 1 /\ max(id) = 10^9 /\
+ * mutable(id) = false /\ optional(id) = false /\ min(id) = 1 /\ max(id) = 1000000000 /\
  * mutable(name) = true /\ optional(name) = false /\ length(name) = 50 /\
  * mutable(phoneNumber) = true /\ optional(phoneNumber) = false /\ length(phoneNumber) = 10 /\
  * mutable(address) = true /\ optional(address) = false /\ length(address) = 100
  */
 public class Customer implements Comparable<Customer> {
-    @DomainConstraint(type = "Integer", mutable = false, optional = false, min = 1, max = 10^9)
+    @DomainConstraint(type = "Integer", mutable = false, optional = false, min = MIN_ID, max = MAX_ID)
     private int id;
     
-    @DomainConstraint(type = "String", mutable = true, optional = false, length = 50)
+    @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_NAME)
     private String name;
     
-    @DomainConstraint(type = "String", mutable = true, optional = false, length = 10)
+    @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_PHONENUMBER)
     private String phoneNumber;
     
-    @DomainConstraint(type = "String", mutable = true, optional = false, length = 100)
+    @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_ADDRESS)
     private String address;
+
+    private static final int MIN_ID=1;
+    private static final int MAX_ID=1000000000;
+    private static final int LENGTH_NAME=50;
+    private static final int LENGTH_PHONENUMBER=10;
+    private static final int LENGTH_ADDRESS=100;
     
     /**
      * check if id satisfied abstract properties
@@ -49,7 +55,7 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     protected boolean validateId(int id){
-        return id >= 1 && id <= Math.pow(10,9);
+        return id >= 1 && id <= MAX_ID;
     }
 
     /**
@@ -63,7 +69,7 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     private boolean validateName(String name){
-        return name != null && name.length() > 0 && name.length() <= 50;
+        return name != null && name.length() > 0 && name.length() <= LENGTH_NAME;
     }
     
     /**
@@ -77,7 +83,7 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     private boolean validatePhoneNumber(String phoneNumber){
-        return phoneNumber != null && phoneNumber.length() > 0 && phoneNumber.length() <= 10;
+        return phoneNumber != null && phoneNumber.length() > 0 && phoneNumber.length() <= LENGTH_PHONENUMBER;
     }
     
     /**
@@ -91,7 +97,7 @@ public class Customer implements Comparable<Customer> {
      * </pre>
      */
     private boolean validateAddress(String address){
-        return address != null && address.length() > 0 && address.length() <= 100;
+        return address != null && address.length() > 0 && address.length() <= LENGTH_ADDRESS;
     }
 
     /**
@@ -112,14 +118,12 @@ public class Customer implements Comparable<Customer> {
             this.id = id;
         } else {
             throw new NotPossibleException("Customer<init>: invalid id: " + id);
-
         }
 
         if (validateName(name)) {
             this.name = name;
         } else {
             throw new NotPossibleException("Customer<init>: invalid name: " + name);
-
         }
 
         if (validatePhoneNumber(phoneNumber)) {
