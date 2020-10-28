@@ -2,10 +2,8 @@ package a2_1801040081;
 import java.lang.Comparable;
 import java.util.Iterator;
 import java.util.Vector;
-import utils.DOpt;
-import utils.DomainConstraint;
-import utils.OptType;
-import utils.collections.Collection;
+
+import utils.*;
 
 /**
  * @overview a collection data type that the objects
@@ -18,7 +16,7 @@ import utils.collections.Collection;
  * @abstract_properties
  * mutable(elements) = true /\ optional(elements) = false
  */
-public class SortedSet<Comparable> implements Collection{
+public class SortedSet{
 	@DomainConstraint(type = "Vector", mutable = true ,optional = false)
     private Vector<Comparable> elements;
 
@@ -41,7 +39,26 @@ public class SortedSet<Comparable> implements Collection{
   	public void insert(Comparable x) {
     	if (getIndex(x) < 0)
       		elements.add(x);
+    	sortList();
   	}
+
+	/**
+	 * @modifies <tt>this</tt>
+	 * @effects <pre>
+	 *     sort the SortedSet in ascending order
+	 * </pre>
+	 */
+	private void sortList(){
+		for (int i = 0; i < size(); i++){
+			for (int j = i; j < size()-1; j++){
+				if(elements.get(j).compareTo(elements.get(j+1)) > 0){
+					Comparable temp = elements.get(j);
+					elements.set(j,elements.get(j+1));
+					elements.set(j+1, temp);
+				}
+			}
+		}
+	}
 
     /**
    	 * @modifies <tt>this</tt>
@@ -54,11 +71,12 @@ public class SortedSet<Comparable> implements Collection{
      */
   	@DOpt(type=OptType.MutatorRemove)
     public void remove(Comparable x) {
-    	Comparable i = getIndex(x);
+    	int i = getIndex(x);
     	if (i < 0)
       		return;
     	elements.set(i, elements.lastElement());
     	elements.remove(elements.size() - 1);
+    	sortList();
   	}
 
     /**
@@ -69,10 +87,13 @@ public class SortedSet<Comparable> implements Collection{
      *    return false</pre>
      */
   	@DOpt(type=OptType.ObserverContains)
-  	public boolean isIn(int x) {
+  	public boolean isIn(Comparable x) {
 	    return (getIndex(x) >= 0);
   	}
 
+  	public Comparable getElement(int index){
+  		return elements.elementAt(index);
+	}
   
   	/**
      * @effects return the cardinality of <tt>this</tt>
@@ -82,21 +103,6 @@ public class SortedSet<Comparable> implements Collection{
     	return elements.size();
   	}
   
-  	/**
-     * @effects
-     *  if this is not empty
-     *    return array Integer[] of elements of this
-     *  else 
-     *    return null 
-     */
-	@DOpt(type=OptType.Observer)  
-  	public Integer[] getElements() {
-    	if (size() == 0)
-      		return null;
-    	else
-      		return elements.toArray(new Integer[size()]);
-  	}
-  
     /**
      * @effects <pre>
    	 *  if this is empty 
@@ -104,10 +110,10 @@ public class SortedSet<Comparable> implements Collection{
      *  else 
      *    return an arbitrary element of this</pre>
      */
-  	public int choose() throws IllegalStateException {
+  	public Comparable choose() throws IllegalStateException {
     	if (size() == 0)
-      		throw new IllegalStateException("IntSet.choose: set is empty");
-    	return (Integer)elements.lastElement();
+      		throw new IllegalStateException("SortedSet.choose: set is empty");
+    	return (Comparable)elements.lastElement();
   	}
 
   	/**
@@ -117,7 +123,7 @@ public class SortedSet<Comparable> implements Collection{
      *  else 
      *    return -1</pre>
      */
-  	private Comparable getIndex(Comparable x) {
+  	public int getIndex(Comparable x) {
     	for (int i = 0; i < elements.size(); i++) {
       		if (x == elements.get(i))
         		return i;
@@ -125,6 +131,14 @@ public class SortedSet<Comparable> implements Collection{
 
     	return -1;
   	}
+
+	/**
+	 * @effects return a generator that iterate through SortedSet
+	 * until there is not any element left
+	 */
+	public Iterator iterator(){
+  		return new SortedSetGen(this);
+	}
   
   	@Override
   	public String toString() {
@@ -141,11 +155,11 @@ public class SortedSet<Comparable> implements Collection{
 
   	@Override
   	public boolean equals(Object o) {
-    	if (!(o instanceof IntSet))
+    	if (!(o instanceof SortedSet))
       		return false;
 
     	// use Vector.equals to compare elements
-    	return elements.equals(((IntSet)o).elements);
+    	return elements.equals(((SortedSet)o).elements);
   	}
   
   	/**
@@ -156,23 +170,65 @@ public class SortedSet<Comparable> implements Collection{
      *     return false</pre>
      */
   	public boolean repOK() {
-    	if (elements == null)
-      		return false;
+		if (elements == null)
+			return false;
 
-    	for (int i = 0; i < elements.size(); i++) {
-      		Integer x = elements.get(i); 
+		for (int i = 0; i < elements.size(); i++) {
+			Comparable x = elements.get(i);
 
-      	/* omitted due to the use of generic
-      	if (!(x instanceof Integer))
-        return false;
-      	*/
+			for (int j = i + 1; j < elements.size(); j++) {
+				if (elements.get(j).equals(x))
+					return false;
+			}
+		}
 
-	      	for (int j = i + 1; j < elements.size(); j++) {
-    	    	if (elements.get(j).equals(x))
-        	  		return false;
-      		}
-    	}
-    	
-    	return true;
-  }
+		return true;
+	}
+
+	/**
+	 * @overview An inner class that implements the Iterator interface
+	 * @attribute
+	 * currentElements Integer int
+	 * elements SortedSet
+	 * @object
+	 * A typical SortedSetGen is SortedSetGen {currentElements, elements}
+	 * where currentElements(currentElements), elements(elements)
+	 * @abstract_properties
+	 * mutable(currentElements) = false /\ optional(currentElement) = false /\
+	 * min(currentElements) = 0 /\
+	 * mutable(elements) = false /\ optional(elements) = false
+	 */
+	private static class SortedSetGen implements Iterator{
+		@DomainConstraint(type = "Integer", mutable = false, optional = false, min = 0)
+  		private int currentElements;
+		@DomainConstraint(type = "SortedSet", mutable = false, optional = false)
+		private SortedSet elements;
+
+		/**
+		 * @effects initialize this as {elements,0}
+		 */
+  		public SortedSetGen(@AttrRef("elements") SortedSet elements){
+  			this.elements = elements;
+  			this.currentElements = 0;
+		}
+
+		/**
+		 * @effects if currentElements < elements.size
+		 * 				return True
+		 * 			else
+		 * 				return False
+		 */
+		@Override
+		public boolean hasNext() {
+			return (currentElements < elements.size());
+		}
+
+		@Override
+		public Object next() {
+			if (currentElements >= elements.size()) {
+				throw new NoMoreElementsException("There is no more Comparable class in the SortedSet!");
+			}
+			return elements.getIndex(currentElements);
+		}
+	}
 }
