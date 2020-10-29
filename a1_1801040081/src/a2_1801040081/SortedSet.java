@@ -33,7 +33,8 @@ public class SortedSet{
      *   if x is already in this 
      *     do nothing 
      *   else 
-     *     add x to this, i.e., this_post = this + {x}</pre>
+     *     add x to this, i.e., this_post = this + {x}
+	 *     invoke sortList()</pre>
      */
   	@DOpt(type=OptType.MutatorAdd)
   	public void insert(Comparable x) {
@@ -67,7 +68,8 @@ public class SortedSet{
      *     do nothing 
      *   else 
      *     remove x from this, i.e. 
-     *     this_post = this - {x}</pre>
+     *     this_post = this - {x}
+	 *     invoke sortList()</pre>
      */
   	@DOpt(type=OptType.MutatorRemove)
     public void remove(Comparable x) {
@@ -91,7 +93,17 @@ public class SortedSet{
 	    return (getIndex(x) >= 0);
   	}
 
+	/**
+	 * @effects <pre>
+	 *  if index < 0 || index >= size()
+	 *    throw new NotPossibleException
+	 *  else
+	 *    return elements.elementsAt(index)</pre>
+	 */
   	public Comparable getElement(int index){
+  		if(index < 0 || index >= size()) {
+			throw new NotPossibleException("Index out of range of the SortedSet!");
+		}
   		return elements.elementAt(index);
 	}
   
@@ -139,13 +151,16 @@ public class SortedSet{
 	public Iterator iterator(){
   		return new SortedSetGen(this);
 	}
-  
+
+	/**
+	 * @effects return a string contain elements inside SortedSet
+	 */
   	@Override
   	public String toString() {
     	if (size() == 0)
-      		return "IntSet:{ }";
+      		return "SortedSet:{ }";
 
-    	String s = "IntSet:{" + elements.elementAt(0).toString();
+    	String s = "SortedSet:{" + elements.get(0).toString();
     	for (int i = 1; i < size(); i++) {
       		s = s + " , " + elements.elementAt(i).toString();
     	}
@@ -153,6 +168,13 @@ public class SortedSet{
     	return s + "}";
   	}
 
+	/**
+	 * @effects
+	 * 		if o is not instanceof SortedSet
+	 * 			return False
+	 * 		else
+	 * 			return elements.equals((SortedSet)o).elements)
+	 */
   	@Override
   	public boolean equals(Object o) {
     	if (!(o instanceof SortedSet))
@@ -209,7 +231,7 @@ public class SortedSet{
 		 */
   		public SortedSetGen(@AttrRef("elements") SortedSet elements){
   			this.elements = elements;
-  			this.currentElements = 0;
+  			this.currentElements = -1;
 		}
 
 		/**
@@ -223,12 +245,19 @@ public class SortedSet{
 			return (currentElements < elements.size());
 		}
 
+		/**
+		 * @effects if currentElements >= elements.size
+		 * 				throw new NoMoreElementException
+		 * 			else
+		 * 				return invoke element.getIndex(currentElements)
+		 */
 		@Override
 		public Object next() {
+			currentElements++;
 			if (currentElements >= elements.size()) {
 				throw new NoMoreElementsException("There is no more Comparable class in the SortedSet!");
 			}
-			return elements.getIndex(currentElements);
+			return elements.getElement(currentElements);
 		}
 	}
 }
