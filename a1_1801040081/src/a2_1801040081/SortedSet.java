@@ -1,5 +1,4 @@
 package a2_1801040081;
-import java.lang.Comparable;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -34,22 +33,13 @@ public class SortedSet{
      *     do nothing 
      *   else 
      *     add x to this, i.e., this_post = this + {x}
-	 *     invoke sortList()</pre>
+	 *     sort the list in ascending order</pre>
      */
   	@DOpt(type=OptType.MutatorAdd)
   	public void insert(Comparable x) {
     	if (getIndex(x) < 0)
       		elements.add(x);
-    	sortList();
-  	}
 
-	/**
-	 * @modifies <tt>this</tt>
-	 * @effects <pre>
-	 *     sort the SortedSet in ascending order
-	 * </pre>
-	 */
-	private void sortList(){
 		for (int i = 0; i < size(); i++){
 			for (int j = i; j < size()-1; j++){
 				if(elements.get(j).compareTo(elements.get(j+1)) > 0){
@@ -59,7 +49,7 @@ public class SortedSet{
 				}
 			}
 		}
-	}
+  	}
 
     /**
    	 * @modifies <tt>this</tt>
@@ -69,16 +59,25 @@ public class SortedSet{
      *   else 
      *     remove x from this, i.e. 
      *     this_post = this - {x}
-	 *     invoke sortList()</pre>
+	 *     sort the list in ascending order</pre>
      */
   	@DOpt(type=OptType.MutatorRemove)
     public void remove(Comparable x) {
-    	int i = getIndex(x);
-    	if (i < 0)
+    	int j = getIndex(x);
+    	if (j < 0)
       		return;
-    	elements.set(i, elements.lastElement());
+    	elements.set(j, elements.lastElement());
     	elements.remove(elements.size() - 1);
-    	sortList();
+
+		for (int i = 0; i < size(); i++){
+			for (int j = i; j < size()-1; j++){
+				if(elements.get(j).compareTo(elements.get(j+1)) > 0){
+					Comparable temp = elements.get(j);
+					elements.set(j,elements.get(j+1));
+					elements.set(j+1, temp);
+				}
+			}
+		}
   	}
 
     /**
