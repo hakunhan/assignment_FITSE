@@ -70,11 +70,11 @@ public class SortedSet{
     	elements.remove(elements.size() - 1);
 
 		for (int i = 0; i < size(); i++){
-			for (int j = i; j < size()-1; j++){
-				if(elements.get(j).compareTo(elements.get(j+1)) > 0){
-					Comparable temp = elements.get(j);
-					elements.set(j,elements.get(j+1));
-					elements.set(j+1, temp);
+			for (int k = i; k < size()-1; k++){
+				if(elements.get(k).compareTo(elements.get(k+1)) > 0){
+					Comparable temp = elements.get(k);
+					elements.set(k,elements.get(k+1));
+					elements.set(k+1, temp);
 				}
 			}
 		}

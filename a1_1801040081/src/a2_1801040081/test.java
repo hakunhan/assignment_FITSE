@@ -19,7 +19,7 @@ public class test {
         System.out.println(s.toString());
 
 
-        Iterator a = s.iter;
+        Iterator a = s.iterator();
         System.out.println(a.hasNext());
         System.out.println(a.next().toString());
     }
