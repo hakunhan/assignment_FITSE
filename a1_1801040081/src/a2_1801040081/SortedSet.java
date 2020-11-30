@@ -68,16 +68,6 @@ public class SortedSet{
       		return;
     	elements.set(j, elements.lastElement());
     	elements.remove(elements.size() - 1);
-
-		for (int i = 0; i < size(); i++){
-			for (int k = i; k < size()-1; k++){
-				if(elements.get(k).compareTo(elements.get(k+1)) > 0){
-					Comparable temp = elements.get(k);
-					elements.set(k,elements.get(k+1));
-					elements.set(k+1, temp);
-				}
-			}
-		}
   	}
 
     /**
