@@ -250,6 +250,7 @@ public class Customer implements Comparable<Customer> {
      *          return false
      * </pre>
      */
+    @DOpt(type = OptType.Helper)
     protected boolean repOK(){
         return validateId(id) && validatePhoneNumber(phoneNumber) && validateName(name) && validateAddress(address);
     }

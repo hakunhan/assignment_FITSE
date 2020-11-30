@@ -1,5 +1,8 @@
 package a3_1801040081.fsis;
 
+import utils.DOpt;
+import utils.OptType;
+
 /**
  * @overview
  * An interface where its objects can be read as HTML documents by the keyword search engine
@@ -19,5 +22,6 @@ public interface Document {
      *          </body>
      *      </html>
      */
+    @DOpt(type = OptType.Observer)
     public String toHtmlDoc();
 }
