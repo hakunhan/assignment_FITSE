@@ -106,6 +106,32 @@ public class Engine {
     
     return d;
   }
+
+  /**
+   * @effects
+   *    if d is null
+   *        throws NullPointerException
+   *    else
+   *       add d to this.tt and this.wt using their respective methods.
+   *       If this.q is not null
+   *          update this.q to contain any new matching documents.
+   *       Return this.q
+   */
+  public Query addDoc(Doc d){
+      if (d == null){
+        throw new NullPointerException("Doc is null");
+      }
+      else{
+        tt.addDoc(d);
+        Hashtable h = wt.addDoc(d);
+
+        if(q != null){
+          q.addDoc(d, h);
+        }
+      }
+
+      return q;
+  }
   
   /**
    * A method to retrieve documents from remote web site <code>u</code> and store 

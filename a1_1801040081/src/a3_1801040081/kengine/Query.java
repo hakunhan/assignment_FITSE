@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import utils.NotPossibleException;
+import utils.*;
 
 
 /**
@@ -241,5 +241,78 @@ public class Query {
       return sb.toString();
     else
       return null;
-  } 
+  }
+
+  /**
+   * @effects
+   *  if there is matches
+   *    return a iterator of matches
+   *  else
+   *    return null
+   */
+  @DOpt(type = OptType.ObserverIterator)
+  public Iterator matchIterator(){
+      if (matches.size() < 1)
+        return null;
+
+      return new MatchGen(this.matches);
+  }
+
+  /**
+   * @overview An inner class that implements the Iterator interface
+   * @attribute
+   * matches        Vector
+   * currentMatches Integer int
+   * @object
+   * A typical MatchGen is MatchGen {matches, currentMatches}
+   * where matches(matches), currentMatches(currentMatches)
+   * @abstract_properties
+   * mutable(matches) = false /\ optional(matches) = false /\
+   * mutable(currentMatches) = false /\ optional(currentMatches) = false /\ min(currentMatches) = -1
+   */
+  private static class MatchGen implements Iterator{
+    @DomainConstraint(type = "Vector", mutable = false, optional = false)
+    private Vector matches;
+    @DomainConstraint(type = "Integer", mutable = false, optional = false, min = -1)
+    private int currentMatches;
+
+    /**
+     * @effects initialize this as {matches,-1}
+     */
+    @DOpt(type = OptType.Constructor)
+    public MatchGen(Vector matches){
+        this.matches = (Vector) matches.clone();
+        currentMatches = -1;
+    }
+
+    /**
+     * @effects if currentMatches < matches.size
+     * 				return True
+     * 			else
+     * 				return False
+     */
+    @Override
+    @DOpt(type = OptType.ObserverContains)
+    public boolean hasNext() {
+      return currentMatches < matches.size();
+    }
+
+
+    /**
+     * @effects if currentMatches >= matches.size
+     * 				throw new NoMoreElementException
+     * 			else
+     * 				return invoke matches.getIndex(currentMatches)
+     */
+    @Override
+    @DOpt(type = OptType.Observer)
+    public Object next() {
+      currentMatches++;
+      if(hasNext()){
+        throw new NoMoreElementsException("There is no more match in the Query!");
+      }
+
+      return matches.get(currentMatches);
+    }
+  }
 }

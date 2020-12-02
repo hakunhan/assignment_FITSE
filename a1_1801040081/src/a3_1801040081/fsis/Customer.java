@@ -1,4 +1,4 @@
-package a1_1801040081;
+package a3_1801040081.fsis;
 
 import utils.DomainConstraint;
 import utils.AttrRef;
@@ -25,18 +25,18 @@ import utils.NotPossibleException;
  * mutable(phoneNumber) = true /\ optional(phoneNumber) = false /\ length(phoneNumber) = 10 /\
  * mutable(address) = true /\ optional(address) = false /\ length(address) = 100
  */
-public class Customer implements Comparable<Customer> {
+public class Customer implements Comparable<Customer>, Document{
     @DomainConstraint(type = "Integer", mutable = false, optional = false, min = MIN_ID, max = MAX_ID)
-    private int id;
+    protected int id;
     
     @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_NAME)
-    private String name;
+    protected String name;
     
     @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_PHONENUMBER)
-    private String phoneNumber;
+    protected String phoneNumber;
     
     @DomainConstraint(type = "String", mutable = true, optional = false, length = LENGTH_ADDRESS)
-    private String address;
+    protected String address;
 
     private static final int MIN_ID=1;
     private static final int MAX_ID=1000000000;
@@ -280,6 +280,26 @@ public class Customer implements Comparable<Customer> {
 
         Customer v = (Customer) o;
         return this.name.compareTo(v.name);
+    }
+
+    /**
+     * @effect
+     *      return a String containing the text of a simple HTML document
+     *      generated from the state of the current Customer
+     *      e.g. Customer:<4, "John", "12345678", "Hanoi"> invoke toHtmlDoc()
+     *      -> output:
+     *      <html>
+     *          <head><title>Customer:4-John</title></head>
+     *          <body>
+     *              4 John 12345678 Hanoi
+     *          </body>
+     *      </html>
+     */
+    @Override
+    @DOpt(type = OptType.Observer)
+    public String toHtmlDoc(){
+        String result = String.format("<html><head><title>Customer:%d-%s</title></head><body>%d %s %s %s</body></html>", id, name, id, name, phoneNumber, address);
+        return result;
     }
 
     @Override

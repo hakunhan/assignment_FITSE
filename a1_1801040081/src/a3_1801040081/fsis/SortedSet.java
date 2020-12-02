@@ -212,17 +212,17 @@ public class SortedSet{
 	 * where currentElements(currentElements), elements(elements)
 	 * @abstract_properties
 	 * mutable(currentElements) = false /\ optional(currentElement) = false /\
-	 * min(currentElements) = 0 /\
+	 * min(currentElements) = -1 /\
 	 * mutable(elements) = false /\ optional(elements) = false
 	 */
 	private static class SortedSetGen implements Iterator{
-		@DomainConstraint(type = "Integer", mutable = false, optional = false, min = 0)
+		@DomainConstraint(type = "Integer", mutable = false, optional = false, min = -1)
   		private int currentElements;
 		@DomainConstraint(type = "SortedSet", mutable = false, optional = false)
 		private SortedSet elements;
 
 		/**
-		 * @effects initialize this as {elements,0}
+		 * @effects initialize this as {elements,-1}
 		 */
   		public SortedSetGen(@AttrRef("elements") SortedSet elements){
   			this.elements = elements;

@@ -1,4 +1,4 @@
-package a1_1801040081;
+package a3_1801040081.fsis;
 
 import utils.*;
 
@@ -106,6 +106,27 @@ public class HighEarner extends Customer{
 				", address='" + super.getAddress() + '\'' +
 				"income=" + income + '\'' +
 				'}';
+	}
+
+	/**
+	 * @effect
+	 *      return a String containing the text of a simple HTML document
+	 *      generated from the state of the current HighEarner
+	 *      e.g. HighEarner:<10000001, "John", "12345678", "Hanoi", 10000001> invoke toHtmlDoc()
+	 *      -> output:
+	 *      <html>
+	 *          <head><title>Customer:4-John</title></head>
+	 *          <body>
+	 *              4 John 12345678 Hanoi 10000001
+	 *          </body>
+	 *      </html>
+	 */
+	@Override
+	@DOpt(type = OptType.Observer)
+	public String toHtmlDoc(){
+		String result = String.format("<html><head><title>Customer:%d-%s</title></head><body>%d %s %s %s %f</body></html>",
+										super.id, super.name, super.id, super.name, super.phoneNumber, super.address, income);
+		return result;
 	}
 
 	@Override
