@@ -7,10 +7,10 @@ import static utils.TextIO.putln;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import kengine.Doc;
-import kengine.DocCnt;
-import kengine.Engine;
-import kengine.Query;
+import a3_1801040081.kengine.Doc;
+import a3_1801040081.kengine.DocCnt;
+import a3_1801040081.kengine.Engine;
+import a3_1801040081.kengine.Query;
 import utils.DomainConstraint;
 import utils.NotPossibleException;
 
@@ -313,7 +313,10 @@ public class CustomerWorkSheet {
      * @effects
      *   initialise this to include an empty set of objects and an empty engine
      */
-    public CustomerWorkSheet()
+    public CustomerWorkSheet(){
+        this.objects = new SortedSet();
+        this.engine = new Engine();
+    }
 
     /**
      * @effects
@@ -323,8 +326,20 @@ public class CustomerWorkSheet {
      *     return a string containing each object in this.objects one per line
      */
     @Override
-    public String toString()
+    public String toString(){
+        if (objects.size() < 1){
+            return "empty";
+        }
 
+        Iterator objectsIterator = objects.elements();
+        String result = "";
+
+        while (objectsIterator.hasNext()){
+            result += objectsIterator.next().toString() + "\n";
+        }
+
+        return result;
+    }
 
     /**
      * @effects
@@ -333,7 +348,9 @@ public class CustomerWorkSheet {
      *  else
      *    return false
      */
-    public boolean isEmpty()
+    public boolean isEmpty(){
+        return objects.size() < 1;
+    }
 
     /**
      * @requires
@@ -345,7 +362,18 @@ public class CustomerWorkSheet {
      *  else
      *    throws NotPossibleException
      */
-    public Customer createCustomer(String[] data) throws NotPossibleException
+    public Customer createCustomer(String[] data) throws NotPossibleException{
+        if(data == null || data.length != 4){
+            throw new NotPossibleException("Invalid data for customer!");
+        }
+        try{
+            return new Customer(Integer.parseInt(data[0]), data[1], data[2], data[3]);
+        }catch(NumberFormatException e){
+            throw new NotPossibleException("Invalid data for customer!");
+        }catch(NotPossibleException e){
+            throw new NotPossibleException("Invalid data for customer!");
+        }
+    }
 
     /**
      * @requires
@@ -357,14 +385,28 @@ public class CustomerWorkSheet {
      *  else
      *    throws NotPossibleException
      */
-    public HighEarner createHighEarner(String[] data) throws NotPossibleException
+    public HighEarner createHighEarner(String[] data) throws NotPossibleException{
+        if(data == null || data.length != 5){
+            throw new NotPossibleException("Invalid data for high earner!");
+        }
+        try{
+            return new HighEarner(Integer.parseInt(data[0]), data[1], data[2], data[3], Float.parseFloat(data[4]));
+        }catch(NumberFormatException e){
+            throw new NotPossibleException("Invalid data for high earner!");
+        }catch(NotPossibleException e){
+            throw new NotPossibleException("Invalid data for high earner!");
+        }
+    }
 
     /**
      * @effects
      *   add c to this.objects and
      *   add to this.engine a Doc object created from c.toHtmlDoc
      */
-    public void addCustomer(Customer c)
+    public void addCustomer(Customer c){
+        objects.insert(c);
+        engine.addDoc(new Doc(c.toHtmlDoc()));
+    }
 
     /**
      * @requires words != null /\ words.length > 0
@@ -375,6 +417,24 @@ public class CustomerWorkSheet {
      *   If fails to execute query using words
      *     throws NotPossibleException
      */
-    public Query search(String[] words) throws NotPossibleException
+    public Query search(String[] words) throws NotPossibleException{
+        if (words == null || words.length == 0){
+            throw new NotPossibleException("Invalid words");
+        }
+
+        try {
+            Query q = engine.queryFirst(words[0]);
+
+            if(words.length > 1){
+                for (int i = 1; i < words.length; i++){
+                    q = engine.queryMore(words[i]);
+                }
+            }
+
+            return q;
+        }catch(NotPossibleException e){
+            throw new NotPossibleException("Fail to execute query using words");
+        }
+    }
 }
 

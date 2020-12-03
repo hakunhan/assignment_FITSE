@@ -140,7 +140,7 @@ public class SortedSet{
 	 * until there is not any element left
 	 */
 	@DOpt(type = OptType.ObserverIterator)
-	public Iterator iterator(){
+	public Iterator elements(){
   		return new SortedSetGen(this);
 	}
 
@@ -212,7 +212,7 @@ public class SortedSet{
 	 * where currentElements(currentElements), elements(elements)
 	 * @abstract_properties
 	 * mutable(currentElements) = false /\ optional(currentElement) = false /\
-	 * min(currentElements) = -1 /\
+	 * min(currentElements) = 0 /\
 	 * mutable(elements) = false /\ optional(elements) = false
 	 */
 	private static class SortedSetGen implements Iterator{
@@ -222,11 +222,11 @@ public class SortedSet{
 		private SortedSet elements;
 
 		/**
-		 * @effects initialize this as {elements,-1}
+		 * @effects initialize this as {elements,0}
 		 */
   		public SortedSetGen(@AttrRef("elements") SortedSet elements){
   			this.elements = elements;
-  			this.currentElements = -1;
+  			this.currentElements = 0;
 		}
 
 		/**
@@ -245,16 +245,15 @@ public class SortedSet{
 		 * @effects if currentElements >= elements.size
 		 * 				throw new NoMoreElementException
 		 * 			else
-		 * 				return invoke element.getIndex(currentElements)
+		 * 				return invoke element.getIndex(currentElements++)
 		 */
 		@Override
 		@DOpt(type = OptType.Observer)
 		public Object next() {
-			currentElements++;
 			if (currentElements >= elements.size()) {
 				throw new NoMoreElementsException("There is no more Comparable class in the SortedSet!");
 			}
-			return elements.getElement(currentElements);
+			return elements.getElement(currentElements++);
 		}
 	}
 }

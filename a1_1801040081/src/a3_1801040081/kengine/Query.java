@@ -268,7 +268,7 @@ public class Query {
    * where matches(matches), currentMatches(currentMatches)
    * @abstract_properties
    * mutable(matches) = false /\ optional(matches) = false /\
-   * mutable(currentMatches) = false /\ optional(currentMatches) = false /\ min(currentMatches) = -1
+   * mutable(currentMatches) = false /\ optional(currentMatches) = false /\ min(currentMatches) = 0
    */
   private static class MatchGen implements Iterator{
     @DomainConstraint(type = "Vector", mutable = false, optional = false)
@@ -277,12 +277,12 @@ public class Query {
     private int currentMatches;
 
     /**
-     * @effects initialize this as {matches,-1}
+     * @effects initialize this as {matches,0}
      */
     @DOpt(type = OptType.Constructor)
     public MatchGen(Vector matches){
         this.matches = (Vector) matches.clone();
-        currentMatches = -1;
+        currentMatches = 0;
     }
 
     /**
@@ -302,17 +302,16 @@ public class Query {
      * @effects if currentMatches >= matches.size
      * 				throw new NoMoreElementException
      * 			else
-     * 				return invoke matches.getIndex(currentMatches)
+     * 				return invoke matches.getIndex(currentMatches++)
      */
     @Override
     @DOpt(type = OptType.Observer)
     public Object next() {
-      currentMatches++;
-      if(hasNext()){
+      if(currentMatches >= matches.size()){
         throw new NoMoreElementsException("There is no more match in the Query!");
       }
 
-      return matches.get(currentMatches);
+      return matches.get(currentMatches++);
     }
   }
 }
