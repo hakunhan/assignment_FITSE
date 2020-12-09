@@ -1,8 +1,10 @@
 package a3_1801040081.fsis;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import utils.*;
+import utils.collections.Collection;
 
 /**
  * @overview a collection data type that the objects
@@ -15,7 +17,7 @@ import utils.*;
  * @abstract_properties
  * mutable(elements) = true /\ optional(elements) = false
  */
-public class SortedSet{
+public class SortedSet implements Collection {
 	@DomainConstraint(type = "Vector", mutable = true ,optional = false)
     private Vector<Comparable> elements;
 
@@ -63,10 +65,10 @@ public class SortedSet{
      */
   	@DOpt(type=OptType.MutatorRemove)
     public void remove(Comparable x) {
-    	int j = getIndex(x);
-    	if (j < 0)
+    	int i = getIndex(x);
+    	if (i < 0)
       		return;
-    	elements.set(j, elements.lastElement());
+    	elements.set(i, elements.lastElement());
     	elements.remove(elements.size() - 1);
   	}
 
@@ -81,6 +83,18 @@ public class SortedSet{
   	public boolean isIn(Comparable x) {
 	    return (getIndex(x) >= 0);
   	}
+
+	/**
+	 * @effects if this is not empty return array Comparable[] of s of this else
+	 *          return null
+	 */
+	@DOpt(type = OptType.Observer)
+	public Comparable[] getElements() {
+		if (size() == 0)
+			return null;
+		else
+			return elements.toArray(new Comparable[size()]);
+	}
 
 	/**
 	 * @effects <pre>
@@ -140,8 +154,8 @@ public class SortedSet{
 	 * until there is not any element left
 	 */
 	@DOpt(type = OptType.ObserverIterator)
-	public Iterator elements(){
-  		return new SortedSetGen(this);
+	public Iterator iterator(){
+  		return new SortedSetGen();
 	}
 
 	/**
@@ -215,17 +229,14 @@ public class SortedSet{
 	 * min(currentElements) = 0 /\
 	 * mutable(elements) = false /\ optional(elements) = false
 	 */
-	private static class SortedSetGen implements Iterator{
+	private class SortedSetGen implements Iterator{
 		@DomainConstraint(type = "Integer", mutable = false, optional = false, min = -1)
   		private int currentElements;
-		@DomainConstraint(type = "SortedSet", mutable = false, optional = false)
-		private SortedSet elements;
 
 		/**
 		 * @effects initialize this as {elements,0}
 		 */
-  		public SortedSetGen(@AttrRef("elements") SortedSet elements){
-  			this.elements = elements;
+  		public SortedSetGen(){
   			this.currentElements = 0;
 		}
 
@@ -238,7 +249,7 @@ public class SortedSet{
 		@Override
 		@DOpt(type = OptType.ObserverContains)
 		public boolean hasNext() {
-			return (currentElements < elements.size());
+			return currentElements < size();
 		}
 
 		/**
@@ -250,10 +261,18 @@ public class SortedSet{
 		@Override
 		@DOpt(type = OptType.Observer)
 		public Object next() {
-			if (currentElements >= elements.size()) {
-				throw new NoMoreElementsException("There is no more Comparable class in the SortedSet!");
+			if (hasNext()) {
+				Comparable next = getElements()[currentElements];
+				currentElements++;
+				return next;
 			}
-			return elements.getElement(currentElements++);
+
+			throw new NoSuchElementException("SortedSet.iterator");
+		}
+
+		@Override
+		public void remove(){
+			//do nothing
 		}
 	}
 }

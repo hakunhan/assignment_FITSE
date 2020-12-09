@@ -285,7 +285,7 @@ public class CustomerWorkSheet {
         if (isEmpty())
             return null;
         else
-            return objects.elements();
+            return objects.iterator();
     }
 
     /**
@@ -331,7 +331,7 @@ public class CustomerWorkSheet {
             return "empty";
         }
 
-        Iterator objectsIterator = objects.elements();
+        Iterator objectsIterator = objects.iterator();
         String result = "";
 
         while (objectsIterator.hasNext()){
@@ -421,19 +421,16 @@ public class CustomerWorkSheet {
         if (words == null || words.length == 0){
             throw new NotPossibleException("Invalid words");
         }
-
-        try {
+        else {
             Query q = engine.queryFirst(words[0]);
 
-            if(words.length > 1){
-                for (int i = 1; i < words.length; i++){
+            if (words.length > 1) {
+                for (int i = 1; i < words.length; i++) {
                     q = engine.queryMore(words[i]);
                 }
             }
 
             return q;
-        }catch(NotPossibleException e){
-            throw new NotPossibleException("Fail to execute query using words");
         }
     }
 }

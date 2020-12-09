@@ -15,7 +15,7 @@ import java.lang.Math;
  * P_Customer /\ min(id) = 10^7 /\ mutable(income) = true /\ optional(income) = false /\ min(income) = 10^7
  */
 public class HighEarner extends Customer{
-	@DomainConstraint(type = "String", mutable = true, optional = false, min = 10^7)
+	@DomainConstraint(type = "String", mutable = true, optional = false, min = 10000000)
 	private float income;
 
 	/**
@@ -29,7 +29,7 @@ public class HighEarner extends Customer{
 	 * </pre>
 	 */
 	private boolean validateIncome(float income){
-		return income >= Math.pow(10,7);
+		return income >= 10000000;
 	}
 
 	/**
@@ -42,9 +42,9 @@ public class HighEarner extends Customer{
 	 * </pre>
 	 */
 	@Override
-	@DomainConstraint(type = "Integer", mutable = false, optional = false, min = 10^7, max = 10^9)
+	@DomainConstraint(type = "Integer", mutable = false, optional = false, min = 10000000, max = 1000000000)
 	protected boolean validateId(int id){
-		return id >= Math.pow(10,7) && id <= Math.pow(10,9);
+		return id >= 10000000;
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class HighEarner extends Customer{
 		super(id,name,phoneNumber,address);
                 
 		if(!validateIncome(income)){
-			throw new NotPossibleException("Customer <init>: invalid argument");
+			throw new NotPossibleException("HighEarner <init>: invalid argument");
 		}
 
 		this.income = income;

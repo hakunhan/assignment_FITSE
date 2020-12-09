@@ -22,5 +22,8 @@ public class test {
         Iterator a = s.iterator();
         System.out.println(a.hasNext());
         System.out.println(a.next().toString());
+        System.out.println(a.next().toString());
+        System.out.println(a.next().toString());
+        System.out.println(s.size());
     }
 }
